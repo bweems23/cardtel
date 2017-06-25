@@ -1,0 +1,141 @@
+<html>
+  <head>
+    <title>Cardtel</title>
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,500,700" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  </head>
+  <body>
+
+    <script src="{% static 'js/scripts.js' %}" defer></script>
+
+
+      <div class="header">
+        <div class="overlay"></div>
+        <div class="header-text-container">
+          <div class="header-text-subcontainer">
+            <h1>Cardtel</h1>
+            <q class="header-subtitle">The best card game ever made</q>
+          </div>
+        </div>
+      </div>
+
+      <div id="navigation">
+        <a id="nav-intro" class="selected" onclick="navigate('intro', this)">Introduction</a>
+        <a id="nav-rules" onclick="navigate('rules', this)">Rules</a>
+        <a id="nav-practices" onclick="navigate('practices', this)">Best Practices</a>
+        <a id="nav-history" onclick="navigate('history', this)">History</a>
+        <a id="nav-twitter" onclick="navigate('twitter', this)">Twitter</a>
+        <a id="nav-contact" onclick="navigate('contact', this)">Contact</a>
+
+      </div>
+
+    <div class="container">
+
+      <div class="content" id="intro">
+        <h3>Introduction</h3>
+        <p>Welcome to Cardtel! The best game ever made. We hope you enjoy!</p>
+      </div>
+
+      <div class="content" id="rules">
+        <h3>Rules</h3>
+        <div class="subcontent">
+          <h4>Setup</h4>
+          <p>Each player will be dealt the same number of cards. That number depends on the number of players. The reason for this is that we always want some number of cards to not be in play. Number of cards per player is as follows:</p>
+          <p>
+          2 players: 13 cards each<br>
+          3 players: 12 cards each<br>
+          4 players: 9 cards each<br>
+          5 players: 8 cards each</p>
+          <p>At the start of a new game of Cardtel, the player currently in last overall goes first. 
+        If there are no existing standings, choose any game of chance to decide who goes first 
+        (we usually use <a href='https://en.wikipedia.org/wiki/Odds_and_evens' target='_blank'>odds and evens</a>).
+          </p>
+        </div>
+        <div class="subcontent">
+          <h4>Gameplay</h4>
+
+          <p class="title">Overview</p>
+          <p>Each player goes around and plays at least one card into the middle to make the best possible poker hand combination. If a player does not want to play or can not play they fold and are out for the rest of the point. All cards that are played into the middle are cumulative and can be reintroduced into the best possible poker hand at any time during the point. The last player in who did not fold wins the point. First player to 7 points wins the whole game.</p>
+
+          <p class="title">Dealing</p>
+          <p>When cards are dealt out at the beginning those cards are kept from point to point. When a player runs out of cards, that point is finihsed, then all cards are collected and redealt.</p>
+
+          <p class="title">Valid vs. Not Valid Plays</p>
+          <p>A player can play up to 5 cards on a turn, with the rule that every card played <i>must</i> contribute to making the best hand in the middle a better hand. For example, if there is a two pair of 5s and 8s on the board, playing only a 5 is valid because a full house of 5s over 8s is better than the two pair. Playing only an 8 would also be valid because this again makes a full house, 8s over 5s. It would not, however, be valid to play a 5 and an 8 together, because this creates a full house with 8s over 5s regardless of the 5 being present.</p> 
+          <p>A case where playing more than one card IS valid would be if you want to turn a pair into two pair by playing both parts to a pair. You could also turn a 5, 6, 7, 8, 9 straight into a 7, 8, 9, 10, Jack straight by playing a 10 and Jack together, since a straight up to Jack is better than a straight up to 9, and both the 10 and the Jack are <span class="underline">necessary to make the hand better</span>.</p>
+
+          <p class="title">Ordering of hands</p>
+          <p>This is the same as poker, but here's a refresher. This is the list of hands ordered from best to worst:</p>
+          <p>Straight flush<br>
+          Four of a kind<br>
+          Full house<br>
+          Flush<br>
+          Straight<br>
+          Three of a kind<br>
+          Two pair<br>
+          Pair<br>
+          High card</p>
+
+          <p class="title">Important:</p>
+          <p>Kickers <span class="underline">do not</span> count towards making a hand better. If the best hand does not use up the full five cards, then the remaining slots are simply ignored.</p>
+
+
+          <p class="title">Sample Round</p>
+          <p>Now let's walk through a sample round with three players:</p>
+          <p>
+          Player 1 plays a 3 of hearts <i>(current best hand: 3 high)</i><br>
+          Player 2 plays a 6 of clubs <i>(current best hand: 6 high)</i><br>
+          Player 3 plays a 3 of clubs <i>(current best hand: pair of 3s)</i><br>
+          Player 1 plays a 5 of diamonds and a 5 of hearts <i>(current best hand: two pair, 3s and 5s)</i><br>
+          Player 2 folds <i>(current best hand: two pair, 3s and 5s)</i><br>
+          Player 3 plays a 4 of spades and a 7 of spades <i>(current best hand: straight, up to 7)</i><br>
+          Player 1 plays an 8 of diamonds <i>(current best hand: straight, up to 8)</i><br>
+          Player 3 plays a 3 of diamonds <i>(current best hand: full house, 3s over 5s)</i><br>
+          Player 1 plays a 5 of spades <i>(current best hand: full house, 5s over 3s)</i><br>
+          Player 3 folds -- Player 1 wins the point
+          </p>
+          
+          <p class="title">Keeping a running score</p>
+          <p>Cardtel is often played with a long running score. The running score is kept by assigning points according to how each player placed in the rankings, based on how many points they had when someone reached 7.</p>
+          <p>The points are the simplest zero sum game:</p>
+          <br>
+          <p>2 player: 1st place gets 1 point, 2nd place gets -1 points</p>
+          <p>3 player: 1st place gets 1 point, 2nd place gets 0 points, 3rd place gets -1 points</p>
+          <p>4 player: 1st place gets 2 points, 2nd place gets 1 point, 3rd place gets -1 points, 4th place gets -2 points</p>
+          <p>and so on...</p>
+          <br>
+          <p>In the case of a tie, the placement will be decided in a one point playoff. Each player in contention will play a single round in which it is sudden death, person to get the first point is the winner</p>
+          <p>The reigning champion of the running score is called the "Kingpin." The Kingpin holds his or her title until their score is beaten (not tied).</p>
+        </div>
+      </div>
+
+      <div class="content" id="practices">
+        <h3>Best Practices</h3>
+        <p>It's recommended that you use jolly ranchers to keep track of your points</p><br>
+        <p>If you're keeping a running score, it's polite to say "Who's the kingpin now b**ches!?" after winning the game, to which all players will respond with the name of the kingpin</p>
+        <p>The intention is to remind us that even if you win that game, the kingpin is still the one truly in power and still commands respect.</p>
+      </div>
+
+      <div class="content" id="history">
+        <h3>History</h3>
+        <p>Cardtel was invented on a beautiful day at Dolores Park in San Francisco. It was created by four roommates - Ben Weems, Viraj Bindra, Michael Lublin, and Rachel Marincola.</p>
+      </div>
+
+      <div class="content" id="twitter">
+        <h3>What are people saying?</h3>
+        <p></p>
+        <a class="twitter-timeline"  href="https://twitter.com/hashtag/cardtel" data-widget-id="866114827097223169">#cardtel Tweets</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+      </div>
+      
+      <div class="content" id="contact">
+        <h3>Questions?</h3>
+        <p>Feel free to contact us at kingpin@cardtel.info if you have questions.</p>
+      </div>
+
+    </div>
+
+  </body>
+</html>
