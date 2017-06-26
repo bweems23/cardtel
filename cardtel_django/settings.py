@@ -2,7 +2,6 @@ import os
 # Django settings for cardtel_django project.
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -50,7 +49,6 @@ USE_L10N = True
 USE_TZ = True
 
 PROJECT_DIR = os.path.dirname(__file__).decode('utf-8')
-print "Prodjct dir {}".format(PROJECT_DIR)
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
@@ -89,13 +87,6 @@ STATICFILES_FINDERS = (
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '6pluiru+3@+92lrkz!j*(g2evgxqv2_ptjs@ezn03^xip3783u'
-
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',

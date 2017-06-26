@@ -1,3 +1,7 @@
 from django.db import models
 
-# Create your models here.
+class TestModel(models.Model):
+
+    class Meta:
+        db_table = 'test_model'
+        app_label = 'cardtel'
