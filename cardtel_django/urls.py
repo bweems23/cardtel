@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from cardtel.views import index
+from cardtel import views
 from cardtel_django import settings
 
 # Uncomment the next two lines to enable the admin:
@@ -11,7 +11,7 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', index),
+    url(r'^$', views.index),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()
