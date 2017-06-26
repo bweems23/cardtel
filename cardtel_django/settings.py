@@ -48,7 +48,7 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
-PROJECT_DIR = os.path.dirname(__file__).decode('utf-8')
+PROJECT_DIR = os.path.dirname(__file__)
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
