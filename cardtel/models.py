@@ -57,6 +57,8 @@ class Player(models.Model):
     )
     score = models.IntegerField(default=0)
     cards = models.ManyToManyField('cardtel.Card', through='cardtel.PlayerCardLink')
+    has_folded = models.BooleanField(default=False)
+    play_order = models.IntegerField()
 
 
 class Card(models.Model):
