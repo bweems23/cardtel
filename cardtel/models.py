@@ -78,6 +78,7 @@ class Table(models.Model):
         app_label = 'cardtel'
 
     cards = models.ManyToManyField('cardtel.Card')
+    best_hand_score = models.IntegerField()
 
 class PlayerCardLink(models.Model):
 
