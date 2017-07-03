@@ -117,7 +117,7 @@ class User(models.Model):
         app_label = 'cardtel'
 
     username = models.CharField(max_length=20)
-    ## TODO track overall points
+    score = models.IntegerField(default=0)
 
     def __unicode__(self):
         return username
