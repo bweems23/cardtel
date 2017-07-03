@@ -10,10 +10,6 @@ class Game(models.Model):
         'cardtel.User',
         through='cardtel.Player'
     )
-    table = models.ForeignKey(
-        'cardtel.Table',
-        related_name='game'
-    )
     current_turn = models.ForeignKey(
         'cardtel.Player',
         related_name='pending_moves'
@@ -76,6 +72,11 @@ class Table(models.Model):
     class Meta:
         db_table = 'table'
         app_label = 'cardtel'
+
+    game = models.ForeignKey(
+        'cardtel.Game',
+        related_name='tables'
+    )
 
     cards = models.ManyToManyField('cardtel.Card')
     best_hand_score = models.IntegerField()
