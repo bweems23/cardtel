@@ -27,6 +27,18 @@ class Game(models.Model):
         auto_now_add=True,
     )
 
+    @property
+    def is_over(self):
+        raise NotImplementedError
+
+    @property
+    def hand_is_over(self):
+        raise NotImplementedError
+
+    @property
+    def point_is_over(self):
+        raise NotImplementedError
+
 
 class Player(models.Model):
 
@@ -88,3 +100,4 @@ class User(models.Model):
         app_label = 'cardtel'
 
     username = models.CharField(max_length=20)
+    ## TODO track overall points
