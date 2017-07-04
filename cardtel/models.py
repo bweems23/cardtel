@@ -22,6 +22,7 @@ class Game(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True,
     )
+    winning_score = models.IntegerField(default=7)
 
     @property
     def is_over(self):
