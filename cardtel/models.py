@@ -8,12 +8,13 @@ class Game(models.Model):
 
     current_turn = models.ForeignKey(
         'cardtel.Player',
-        related_name='pending_moves'
+        related_name='pending_moves',
+        null=True,
     )
     last_to_play_card = models.ForeignKey(
         'cardtel.Player',
         related_name='unanswered_moves',
-        null=True
+        null=True,
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
