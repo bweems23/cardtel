@@ -52,6 +52,7 @@ class Player(models.Model):
     user = models.ForeignKey(
         'cardtel.User',
         db_index=True,
+        related_name='players'
     )
     score = models.IntegerField(default=0)
     cards = models.ManyToManyField('cardtel.Card', through='cardtel.PlayerCardLink')
@@ -87,7 +88,7 @@ class Table(models.Model):
     )
 
     cards = models.ManyToManyField('cardtel.Card')
-    best_hand_score = models.IntegerField()
+    best_hand_score = models.IntegerField(null=True)
 
     def __unicode__(self):
         return "for game {}".format(self.game.id)
