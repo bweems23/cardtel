@@ -64,8 +64,8 @@ class Card(models.Model):
         db_table = 'card'
         app_label = 'cardtel'
 
-    suit = models.IntegerField()
-    number = models.IntegerField()
+    suit = models.CharField(max_length=1)
+    number = models.CharField(max_length=1)
     image = models.FileField()
 
 class Table(models.Model):
