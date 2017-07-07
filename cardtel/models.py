@@ -6,10 +6,6 @@ class Game(models.Model):
         db_table = 'game'
         app_label = 'cardtel'
 
-    players = models.ManyToManyField(
-        'cardtel.User',
-        through='cardtel.Player'
-    )
     current_turn = models.ForeignKey(
         'cardtel.Player',
         related_name='pending_moves'
@@ -47,6 +43,7 @@ class Player(models.Model):
     game = models.ForeignKey(
         'cardtel.Game',
         db_index=True,
+        related_name='players',
     )
     user = models.ForeignKey(
         'cardtel.User',
