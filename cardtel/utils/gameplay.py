@@ -45,10 +45,12 @@ def remove_player_from_game(game, user):
     player.delete()
 
 def update_user_scores(game):
-    players = Player.objects.filter(game=game).all()
-    for player in players:
-        user = player.user
-        user.score = user.score + player.score
-        user.save(update_fields=['score'])
+    raise NotImplementedError
+    # players = Player.objects.filter(game=game).all()
+    # winner = players.order_by('score').first()
+    # for player in players:
+    #     user = player.user
+    #     user.score = user.score + player.score
+    #     user.save(update_fields=['score'])
 
 
