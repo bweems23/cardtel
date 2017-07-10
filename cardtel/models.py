@@ -32,6 +32,9 @@ class Game(models.Model):
     def point_is_over(self):
         raise NotImplementedError
 
+    def __unicode__(self):
+        return "{} players, created at {}".format(self.players.count(), self.created_at)
+
 
 class Player(models.Model):
 
@@ -54,6 +57,9 @@ class Player(models.Model):
     has_folded = models.BooleanField(default=False)
     play_order = models.IntegerField()
 
+    def __unicode__(self):
+        return self.user.username
+
 
 class Card(models.Model):
 
@@ -64,6 +70,9 @@ class Card(models.Model):
     suit = models.CharField(max_length=1)
     number = models.CharField(max_length=1)
     image = models.FileField()
+
+    def __unicode__(self):
+        return "{} of {}".format(self.number, self.suit)
 
 class Table(models.Model):
 
@@ -78,6 +87,9 @@ class Table(models.Model):
 
     cards = models.ManyToManyField('cardtel.Card')
     best_hand_score = models.IntegerField()
+
+    def __unicode__(self):
+        return "for game {}".format(self.game.id)
 
 class PlayerCardLink(models.Model):
 
@@ -95,6 +107,9 @@ class PlayerCardLink(models.Model):
         db_index=True,
     )
 
+    def __unicode__(self):
+        return "{}, {}".format(self.player, self.card)
+
 class User(models.Model):
 
     class Meta:
@@ -103,3 +118,6 @@ class User(models.Model):
 
     username = models.CharField(max_length=20)
     ## TODO track overall points
+
+    def __unicode__(self):
+        return username
