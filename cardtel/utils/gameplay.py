@@ -1,3 +1,5 @@
+import random
+
 from cardtel.models import (
     Game,
     Player,
@@ -82,22 +84,30 @@ def player_score_comparator(player_one, player_two):
     return 0 means they tie (only happens if neither player won a point)
     """
     if player_one.score < player_two.score:
+        # If player 2 has a higher score, they win
         return 1
     if player_one.score > player_two.score:
+        # If player 1 has a higher score, they win
         return -1
 
     player_one_last_point = player_one.points.last()
     player_two_last_point = player_two.points.last()
 
     if not player_one_last_point and not player_two_last_point:
-        return 0
+        # If neither player won a point all game, just choose a
+        # winner randomly
+        return random.choice([-1, 1])
 
     if not player_one_last_point:
+        # If player 1 never got a point, player 2 wins
         return 1
 
     if not player_two_last_point:
+        # If player 2 never got a point, player 1 wins
         return -1
 
+    # If they've both scored points and are tied, then the one with the
+    # most recent point wins
     if player_two_last_point.created_at > player_one_last_point.created_at:
         return 1
     else:
