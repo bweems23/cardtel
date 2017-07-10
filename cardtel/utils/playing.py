@@ -3,6 +3,7 @@ import gameplay
 from django.db import transaction
 
 def play_cards(player, cards):
+    '''|player| attempts to play |cards| on the table.'''
     if check_valid_play(player, cards):
         for card in cards:
             play_card(player, card)
@@ -11,14 +12,17 @@ def play_cards(player, cards):
 
 @transaction.atomic
 def play_card(player, card):
+    '''|player| plays |card| on the table.'''
     player.cards.remove(card)
     player.game.table.add(card)
 
 def fold(player):
+    '''|player| folds, giving up his ability to play again this point.'''
     player.has_folded = True
     player.save()
 
 def check_valid_play(player, new_cards):
+    '''Check if |new_cards| makes the table better during |player|'s turn.'''
     table_deuces_cards = get_deuces_cards(player.game.table.cards.all())
     new_deuces_cards = get_deuces_cards(new_cards)
     all_cards = new_deuces_cards + table_deuces_cards
@@ -41,9 +45,11 @@ def check_valid_play(player, new_cards):
         return False
 
 def finish_hand(game):
+    '''End a hand in the |game|.'''
     raise NotImplementedError
 
 def finish_point(game):
+    '''Finish a point in the |game|'''
     winner = game.last_to_play_card
     winner.score = winner.score + 1
     if game.is_over():
@@ -54,9 +60,12 @@ def finish_point(game):
     winner.save()
 
 def evaluate_cards(cards):
+    '''Evaluate the score of a hand of |cards|'''
+
     raise NotImplementedError
 
 def get_deuces_cards(cards):
+    '''Convert |cards| into deuces format'''
     return [deuces.Card.new(card.number + card.suit)
             for card in player.game.table.cards.all()]
 
