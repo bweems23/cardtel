@@ -8,12 +8,13 @@ class Game(models.Model):
 
     current_turn = models.ForeignKey(
         'cardtel.Player',
-        related_name='pending_moves'
+        related_name='pending_moves',
+        null=True,
     )
     last_to_play_card = models.ForeignKey(
         'cardtel.Player',
         related_name='unanswered_moves',
-        null=True
+        null=True,
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -32,6 +33,28 @@ class Game(models.Model):
     def point_is_over(self):
         raise NotImplementedError
 
+    def __unicode__(self):
+        return "{} players, created at {}".format(self.players.count(), self.created_at)
+
+
+class Point(models.Model):
+
+    class Meta:
+        db_table = 'point'
+        app_label = 'cardtel'
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+    winner = models.ForeignKey(
+        'cardtel.Player',
+        related_name='points',
+    )
+    winning_cards = models.ManyToManyField(
+        'cardtel.Card',
+        related_name='winning_hands'
+    )
+
 
 class Player(models.Model):
 
@@ -40,6 +63,9 @@ class Player(models.Model):
         app_label = 'cardtel'
         unique_together = ('game', 'user')
 
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
     game = models.ForeignKey(
         'cardtel.Game',
         db_index=True,
@@ -48,11 +74,15 @@ class Player(models.Model):
     user = models.ForeignKey(
         'cardtel.User',
         db_index=True,
+        related_name='players'
     )
     score = models.IntegerField(default=0)
     cards = models.ManyToManyField('cardtel.Card', through='cardtel.PlayerCardLink')
     has_folded = models.BooleanField(default=False)
     play_order = models.IntegerField()
+
+    def __unicode__(self):
+        return self.user.username
 
 
 class Card(models.Model):
@@ -61,9 +91,15 @@ class Card(models.Model):
         db_table = 'card'
         app_label = 'cardtel'
 
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
     suit = models.CharField(max_length=1)
     number = models.CharField(max_length=1)
     image = models.FileField()
+
+    def __unicode__(self):
+        return "{} of {}".format(self.number, self.suit)
 
 class Table(models.Model):
 
@@ -71,13 +107,19 @@ class Table(models.Model):
         db_table = 'table'
         app_label = 'cardtel'
 
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
     game = models.ForeignKey(
         'cardtel.Game',
         related_name='tables'
     )
 
     cards = models.ManyToManyField('cardtel.Card')
-    best_hand_score = models.IntegerField()
+    best_hand_score = models.IntegerField(null=True)
+
+    def __unicode__(self):
+        return "for game {}".format(self.game.id)
 
 class PlayerCardLink(models.Model):
 
@@ -86,6 +128,9 @@ class PlayerCardLink(models.Model):
         app_label = 'cardtel'
         unique_together = ('player', 'card')
 
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
     player = models.ForeignKey(
         'cardtel.Player',
         db_index=True,
@@ -95,11 +140,20 @@ class PlayerCardLink(models.Model):
         db_index=True,
     )
 
+    def __unicode__(self):
+        return "{}, {}".format(self.player, self.card)
+
 class User(models.Model):
 
     class Meta:
         db_table = 'user'
         app_label = 'cardtel'
 
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
     username = models.CharField(max_length=20)
-    ## TODO track overall points
+    score = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return username
