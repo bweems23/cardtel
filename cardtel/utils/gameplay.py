@@ -6,11 +6,18 @@ from cardtel.models import (
 
 
 def create_game():
+    """
+    Make a game, and initialize the game's table
+    """
     game = Game.objects.create()
     table = Table.objects.create(game=game)
     return game
 
 def add_player_to_game(game, user):
+    """
+    Add a new player to a game. When the player is added, give them
+    a 0-indexed play order based on the order they joined the game.
+    """
     players = game.players
     if players.count() == 0:
         return Player.objects.create(game=game, user=user, play_order=0)
@@ -30,7 +37,7 @@ def initialize_game(game):
     """
     Set current turn to the player with the lowest overall score
     """
-    game.current_turn = game.players.order_by('score').first()
+    game.current_turn = game.players.order_by('user__score').first()
     game.save(update_fields=['current_turn'])
     return game
 

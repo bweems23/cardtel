@@ -42,15 +42,17 @@ class TestGame(TestCase):
         game = self.game
         user = self.user
         player = add_player_to_game(game, user)
-        game = initialize_game(game)
-        assert game.current_turn == player
-
         other_user = User.objects.create(username='bweems')
         other_user.score = 20
         other_user.save()
         other_player = add_player_to_game(game, other_user)
         game = initialize_game(game)
-        assert game.current_turn == player        
+        assert game.current_turn == player
+
+        other_user.score = -5
+        other_user.save()
+        game = initialize_game(game)
+        assert game.current_turn == other_player        
 
     def test_increment_current_turn(self):
         game = self.game
