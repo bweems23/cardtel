@@ -35,69 +35,95 @@ def initialize_game(game):
     return game
 
 def increment_current_turn(game):
+    """
+    Each player has a play order. Increment the play order by one and then
+    find the player with that ordering. If that player is folded for the
+    round, then go to the next one (until you find someone who hasn't folded)
+    """
     players = game.players
-    new_play_order = (game.current_turn.play_order + 1) % players.count()
-    game.current_turn = players.filter(play_order=new_play_order).first()
+    num_players = players.count()
+    next_play_order = (game.current_turn.play_order + 1) % num_players
+    next_player = players.filter(play_order=next_play_order).first()
+    while next_player.has_folded:
+        next_play_order = (next_play_order + 1) % num_players
+        next_player = players.filter(play_order=next_play_order).first()
+    game.current_turn = next_player
     game.save(update_fields=['current_turn'])
     return game
 
 def remove_player_from_game(game, user):
+    """
+    Remove player from a game
+    """
     player = game.players.filter(user=user).first()
     player.delete()
 
 def update_user_scores(game):
-    players = game.players.order_by('-score').all()
-    ranking_order = get_player_rankings(players)
+    """
+    Get the final player rankings, then assign points accordingly
+    """
+    players = game.players.all()
+    ranking_order = sorted(players, cmp=player_score_comparator)
     assign_final_points_to_players(ranking_order)
 
-def resolve_game_tie(players):
+def player_score_comparator(player_one, player_two):
     """
-    Given players that are tied at the end of a game,
-    return them in the order that they should be ranked.
-    Ranking is based on who won a point the most recently.
+    Rank players in order of score. If there is a tie, higher rank
+    goes to player who won a point most recently
+    return 1 means that player_two wins
+    return -1 means that player_one wins
+    return 0 means they tie (only happens if neither player won a point)
     """
-    return sorted(players, key=lambda x: x.points.last().created_at, reverse=True)
+    if player_one.score < player_two.score:
+        return 1
+    if player_one.score > player_two.score:
+        return -1
 
-def get_player_rankings(players):
-    """
-    Assumes players are passed through in order of game score (descending).
-    Goes through and ranks players in order of score, resolving ties
-    as necessary.
-    """
-    ranking_order = []
-    while len(ranking_order) < len(players):
-        index = len(ranking_order)
-        player = players[index]
-        next_player_index = index + 1
-        if next_player_index > len(players) - 1:
-            next_player = None
-        else:
-            next_player = players[next_player_index]
+    player_one_last_point = player_one.points.last()
+    player_two_last_point = player_two.points.last()
 
-        tied_players = set()
-        while next_player and player.score == next_player.score:
-            tied_players.add(player)
-            tied_players.add(next_player)
-            next_player_index += 1
-            if next_player_index > len(players) - 1:
-                break
-            player = next_player
-            next_player = players[next_player_index]
+    if not player_one_last_point and not player_two_last_point:
+        return 0
 
-        if tied_players:
-            ranking_order.extend(resolve_game_tie(tied_players))
-        else:
-            ranking_order.append(player)
+    if not player_one_last_point:
+        return 1
 
-    return ranking_order
+    if not player_two_last_point:
+        return -1
+
+    if player_two_last_point.created_at > player_one_last_point.created_at:
+        return 1
+    else:
+        return -1
 
 def assign_final_points_to_players(ranked_players):
     """
     Given a final ranking of players, assign points to
     the associated user's overall score.
+
+    Point rules: Zero sum game with more points assigned
+    if more players.
+
+    Example 1:
+    3 player game:
+    1st: 1 point
+    2nd: 0 points
+    3rd: -1 points
+
+    Example 2:
+    4 player game:
+    1st: 2 points
+    2nd: 1 point
+    3rd: -1 point
+    4th: -2 points
     """
     num_players = len(ranked_players)
+    # This is the max number of points any player will get
+    # Start here with the highest ranked player, and continue
+    # to decrement the number of points as you go down the ranking
     points_awarded = num_players / 2
+    # Points are a zero sum game, skip zero if there are an even number
+    # of players
     skip_zero = (num_players % 2 == 0)
     for player in ranked_players:
         user = player.user

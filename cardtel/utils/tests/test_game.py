@@ -63,6 +63,20 @@ class TestGame(TestCase):
         assert game.current_turn == other_player
         assert other_player.play_order == 1
 
+    def test_increment_current_turn_with_folded_player(self):
+        game = self.game
+        user = self.user
+        player = add_player_to_game(game, user)
+        other_user = User.objects.create(username='bweems')
+        other_player = add_player_to_game(game, other_user)
+        other_player.has_folded = True
+        other_player.save()
+        game = initialize_game(game)
+        assert game.current_turn == player
+        game = increment_current_turn(game)
+        # Should skip other player because they folded
+        assert game.current_turn == player
+
     def test_update_user_scores(self):
         game = self.game
         user = self.user
