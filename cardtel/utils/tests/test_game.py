@@ -3,6 +3,7 @@ from django.test import TestCase
 from cardtel.models import (
     Game,
     Player,
+    Point,
     User,
 )
 from cardtel.utils.gameplay import (
@@ -75,9 +76,36 @@ class TestGame(TestCase):
 
         game = update_user_scores(game)
         player = Player.objects.get(id=player.id)
-        assert player.score == 5
+        assert player.user.score == -1
         other_player = Player.objects.get(id=other_player.id)
-        assert other_player.score == 7
+        assert other_player.user.score == 1
+
+    def test_update_user_scores_with_tie(self):
+        game = self.game
+        user = self.user
+        player = add_player_to_game(game, user)
+        other_user = User.objects.create(username='bweems')
+        other_player = add_player_to_game(game, other_user)
+        player.score = 5
+        player.save()
+        other_player.score = 7
+        other_player.save()
+        third_user = User.objects.create(username='viraj')
+        third_player = add_player_to_game(game, third_user)
+        third_player.score = 5
+        third_player.save()
+
+        Point.objects.create(winner=player)
+        Point.objects.create(winner=other_player)
+        Point.objects.create(winner=third_player)
+
+        game = update_user_scores(game)
+        player = Player.objects.get(id=player.id)
+        assert player.user.score == -1
+        other_player = Player.objects.get(id=other_player.id)
+        assert other_player.user.score == 1
+        third_player = Player.objects.get(id=third_player.id)
+        assert third_player.user.score == 0
 
     def test_remove_player_from_game(self):
         game = self.game

@@ -37,6 +37,25 @@ class Game(models.Model):
         return "{} players, created at {}".format(self.players.count(), self.created_at)
 
 
+class Point(models.Model):
+
+    class Meta:
+        db_table = 'point'
+        app_label = 'cardtel'
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+    winner = models.ForeignKey(
+        'cardtel.Player',
+        related_name='points',
+    )
+    winning_cards = models.ManyToManyField(
+        'cardtel.Card',
+        related_name='winning_hands'
+    )
+
+
 class Player(models.Model):
 
     class Meta:
@@ -44,8 +63,11 @@ class Player(models.Model):
         app_label = 'cardtel'
         unique_together = ('game', 'user')
 
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
     game = models.ForeignKey(
-        'cardtel.Game',
+        'cardtel.Game', 
         db_index=True,
         related_name='players',
     )
@@ -69,6 +91,9 @@ class Card(models.Model):
         db_table = 'card'
         app_label = 'cardtel'
 
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
     suit = models.CharField(max_length=1)
     number = models.CharField(max_length=1)
     image = models.FileField()
@@ -82,6 +107,9 @@ class Table(models.Model):
         db_table = 'table'
         app_label = 'cardtel'
 
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
     game = models.ForeignKey(
         'cardtel.Game',
         related_name='tables'
@@ -100,6 +128,9 @@ class PlayerCardLink(models.Model):
         app_label = 'cardtel'
         unique_together = ('player', 'card')
 
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
     player = models.ForeignKey(
         'cardtel.Player',
         db_index=True,
@@ -118,6 +149,9 @@ class User(models.Model):
         db_table = 'user'
         app_label = 'cardtel'
 
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
     username = models.CharField(max_length=20)
     score = models.IntegerField(default=0)
 
