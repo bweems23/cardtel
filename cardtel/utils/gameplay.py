@@ -27,7 +27,9 @@ def add_player_to_game(game, user):
     return Player.objects.create(game=game, user=user, play_order=play_order)
 
 def initialize_game(game):
-    # Set current turn to the player with the lowest overall score
+    """
+    Set current turn to the player with the lowest overall score
+    """
     game.current_turn = game.players.order_by('score').first()
     game.save(update_fields=['current_turn'])
     return game
