@@ -67,7 +67,7 @@ class Player(models.Model):
         auto_now_add=True,
     )
     game = models.ForeignKey(
-        'cardtel.Game', 
+        'cardtel.Game',
         db_index=True,
         related_name='players',
     )
