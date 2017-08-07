@@ -164,14 +164,14 @@ class LookupTable(object):
             self.unsuited_lookup[prime_product] = rank
             rank += 1
 
-        # new_ranks = [self.ncr(i, 5)  for i in xrange(5,13)]
-        rank = LookupTable.MAX_PAIR + 1
-        for idx, h in enumerate(highcards[:5]):
-            print "{0:b}".format(h)
-            prime_product = Card.prime_product_from_rankbits(h)
-            self.unsuited_lookup[prime_product] = rank
-            # if idx in new_ranks
-            #     rank += 1
+        # # new_ranks = [self.ncr(i, 5)  for i in xrange(5,13)]
+        # rank = LookupTable.MAX_PAIR + 1
+        # for h in highcards:
+        #     high_card = max([Card.get_rank_int(card) for card in cards])
+        #     self.unsuitedLookupTable.HIGH_CARD_VALUES[Card.STR_RANKS[high_card]]
+        #     prime_product = Card.prime_product_from_rankbits(h)
+        #     self.unsuited_lookup[prime_product] = rank
+        #     rank += 1
 
     def multiples(self):
         """
@@ -248,7 +248,7 @@ class LookupTable(object):
             pair1, pair2 = tp
 
             # for no kicker
-            product = Card.PRIMES[pair1]**2 * Card.PRIMES[pair2]**2 * Card.PRIMES[kicker]
+            product = Card.PRIMES[pair1]**2 * Card.PRIMES[pair2]**2
             self.unsuited_lookup[product] = rank
 
             # for one kicker
