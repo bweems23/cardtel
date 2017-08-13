@@ -1,4 +1,3 @@
-from rest_framework import routers
 from django.conf.urls import include, url
 from cardtel.api.v1 import api
 
