@@ -4,4 +4,4 @@ from cardtel.api.v1 import api
 
 urlpatterns = [
     url(r'^games/$', api.GameListView.as_view()),
-]s
+]
