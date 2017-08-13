@@ -21,6 +21,10 @@ class Game(models.Model):
     )
     winning_score = models.IntegerField(default=7)
 
+    ## Related Fields
+    # players - all players participating in this game
+    # tables - All tables associated with a game
+
     @property
     def is_over(self):
         raise NotImplementedError
@@ -80,6 +84,11 @@ class Player(models.Model):
     cards = models.ManyToManyField('cardtel.Card', through='cardtel.PlayerCardLink')
     has_folded = models.BooleanField(default=False)
     play_order = models.IntegerField()
+
+    ## Related Fields
+    # points - All pointed in which this player was the winner
+    # pending_moves - games where it's this player's turn
+    # unanswered_moves - games where this player was the last to play
 
     def __unicode__(self):
         return self.user.username
@@ -154,6 +163,9 @@ class User(models.Model):
     )
     username = models.CharField(max_length=20)
     score = models.IntegerField(default=0)
+
+    ## Related Fields
+    # players - games this user is participating in
 
     def __unicode__(self):
         return username
