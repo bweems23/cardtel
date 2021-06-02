@@ -6,7 +6,7 @@ Django==1.11.2
 django-markdown-deux==1.0.5
 gunicorn==19.6.0
 idna==2.5
-markdown2==2.3.4
+markdown2==2.4.0
 psycopg2==2.7.1
 pytz==2017.2
 requests==2.18.1
